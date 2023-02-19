@@ -3,6 +3,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
 
+# This import is to find the best hyper parameters to fit the KNN model
+from sklearn.model_selection import GridSearchCV
+
 # Store the dataset into a variable
 data = pd.read_csv('../spambase/spambase.data', header=None)
 
@@ -49,34 +52,47 @@ X = scaler.fit_transform(X)
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# check the shapes of the resulting arrays
-print(f"X_train shape: {X_train.shape}")
-print(f"X_test shape: {X_test.shape}")
-print(f"y_train shape: {y_train.shape}")
-print(f"y_test shape: {y_test.shape}")
-
-
-# from sklearn.model_selection import cross_val_score
+# # check the shapes of the resulting arrays
+# print(f"X_train shape: {X_train.shape}")
+# print(f"X_test shape: {X_test.shape}")
+# print(f"y_train shape: {y_train.shape}")
+# print(f"y_test shape: {y_test.shape}")
 #
-# # define the range of k values to test
-# k_range = list(range(1, 31))
-#
-# # list to store cross-validation scores for each k
-# k_scores = []
-#
-# # perform k-fold cross-validation for each k value
-# for k in k_range:
-#     knn = KNeighborsClassifier(n_neighbors=k)
-#     scores = cross_val_score(knn, X_train, y_train, cv=10, scoring='accuracy')
-#     k_scores.append(scores.mean())
-#
-# # find the optimal value of k that maximizes cross-validation score
-# optimal_k = k_range[k_scores.index(max(k_scores))]
-# print("The optimal number of neighbors is", optimal_k)
 
+# -- Extra
+print("-- Running grid search now --")
 
-# Create a KNN classifier with 5 NNs
-model = KNeighborsClassifier(n_neighbors=3)
+# define the hyper parameters to search over
+param_grid = {
+    'n_neighbors': [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35],
+    'weights': ['uniform', 'distance'],
+    'metric': ['euclidean', 'manhattan']
+}
+
+# create a KNeighborsClassifier object
+knn = KNeighborsClassifier()
+
+# create a GridSearchCV object
+grid_search = GridSearchCV(
+    knn,  # estimator
+    param_grid,  # hyperparameter space
+    cv=5,  # number of folds for cross-validation
+    scoring='accuracy',  # metric to optimize over
+    n_jobs=-1  # use all available CPU cores
+)
+
+# fit the GridSearchCV object to the training data
+grid_search.fit(X_train, y_train)
+
+# print the best hyper parameters and corresponding score
+print("-- Grid search completed and found the best below hyper parameters -- ")
+print("Best parameters: ", grid_search.best_params_)
+print("Best score: ", grid_search.best_score_)
+
+# Create a KNN classifier
+model = KNeighborsClassifier(n_neighbors=grid_search.best_params_['n_neighbors'],
+                             weights=grid_search.best_params_['weights'],
+                             metric=grid_search.best_params_['metric'])
 
 # Fit the model on the training data
 model.fit(X_train, y_train)
@@ -87,4 +103,4 @@ y_pred = model.predict(X_test)
 # Calculate the accuracy of the model
 accuracy = model.score(X_test, y_test)
 
-print("Accuracy:", accuracy)
+print("Model accuracy:", accuracy)
