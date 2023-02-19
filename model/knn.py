@@ -3,9 +3,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
 
-
 # Store the dataset into a variable
-data = pd.read_csv('C:\\Users\\yohan\\OneDrive\\Desktop\\spam-mail-detection\\spambase\\spambase.data', header=None)
+data = pd.read_csv('../spambase/spambase.data', header=None)
 
 # Specify the dataset columns
 cols = [
@@ -57,13 +56,6 @@ print(f"y_train shape: {y_train.shape}")
 print(f"y_test shape: {y_test.shape}")
 
 
-# Create a KNN classifier with 5 NNs
-knn_model = KNeighborsClassifier(n_neighbors=3)
-
-# Fit the model on the training data
-knn_model.fit(X_train, y_train)
-
-
 # from sklearn.model_selection import cross_val_score
 #
 # # define the range of k values to test
@@ -81,3 +73,18 @@ knn_model.fit(X_train, y_train)
 # # find the optimal value of k that maximizes cross-validation score
 # optimal_k = k_range[k_scores.index(max(k_scores))]
 # print("The optimal number of neighbors is", optimal_k)
+
+
+# Create a KNN classifier with 5 NNs
+model = KNeighborsClassifier(n_neighbors=3)
+
+# Fit the model on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = model.predict(X_test)
+
+# Calculate the accuracy of the model
+accuracy = model.score(X_test, y_test)
+
+print("Accuracy:", accuracy)
