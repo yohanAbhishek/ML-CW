@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
@@ -57,3 +56,28 @@ print(f"X_test shape: {X_test.shape}")
 print(f"y_train shape: {y_train.shape}")
 print(f"y_test shape: {y_test.shape}")
 
+
+# Create a KNN classifier with 5 NNs
+knn_model = KNeighborsClassifier(n_neighbors=3)
+
+# Fit the model on the training data
+knn_model.fit(X_train, y_train)
+
+
+# from sklearn.model_selection import cross_val_score
+#
+# # define the range of k values to test
+# k_range = list(range(1, 31))
+#
+# # list to store cross-validation scores for each k
+# k_scores = []
+#
+# # perform k-fold cross-validation for each k value
+# for k in k_range:
+#     knn = KNeighborsClassifier(n_neighbors=k)
+#     scores = cross_val_score(knn, X_train, y_train, cv=10, scoring='accuracy')
+#     k_scores.append(scores.mean())
+#
+# # find the optimal value of k that maximizes cross-validation score
+# optimal_k = k_range[k_scores.index(max(k_scores))]
+# print("The optimal number of neighbors is", optimal_k)
