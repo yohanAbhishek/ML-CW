@@ -2,13 +2,14 @@
 ◉ This is a class to run KNN on the spambase dataset.
 Additional:
     ◦ In terms of finding the best hyper parameters to use in this model I have implemented a grid search.
+    ◦ Saved the model
 """
 
 from sklearn.neighbors import KNeighborsClassifier
 import preprocess as p
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-
+import joblib
 
 def run_grid(classifier):
     print("-- Running grid search now --")
@@ -38,19 +39,28 @@ def run_grid(classifier):
     return grid_search.best_params_
 
 
-# Run grid search and get the best parameters
-search = run_grid(KNeighborsClassifier())
+def create_model():
+    # Run grid search and get the best parameters
+    search = run_grid(KNeighborsClassifier())
 
-# Create a KNN classifier
-model = KNeighborsClassifier(n_neighbors=search['n_neighbors'],
-                             weights=search['weights'],
-                             metric=search['metric'])
+    # Create a KNN classifier
+    model = KNeighborsClassifier(n_neighbors=search['n_neighbors'],
+                                 weights=search['weights'],
+                                 metric=search['metric'])
 
-# Fit the model on the training data
-model.fit(p.get_X_train(), p.get_y_train())
+    # Fit the model on the training data
+    model.fit(p.get_X_train(), p.get_y_train())
+
+    return model
+
+
+m = create_model()
+
+# Save the model
+# joblib.dump(m, 'knn_model.joblib')
 
 # Make predictions on the test data
-y_pred = model.predict(p.get_X_test())
+y_pred = m.predict(p.get_X_test())
 
 accuracy = accuracy_score(p.get_y_test(), y_pred)
 matrix = confusion_matrix(p.get_y_test(), y_pred)

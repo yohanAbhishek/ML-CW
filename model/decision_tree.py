@@ -8,6 +8,7 @@ from sklearn.tree import DecisionTreeClassifier
 import preprocess as p
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import joblib
 
 
 def run_grid():
@@ -30,15 +31,24 @@ def run_grid():
     return grid_search.best_params_
 
 
-# Run grid search and get the best parameters
-search = run_grid()
+def create_model():
+    # Run grid search and get the best parameters
+    search = run_grid()
 
-# Train the model with the best hyperparameters
-clf = DecisionTreeClassifier(**search)
-clf.fit(p.get_X_train(), p.get_y_train())
+    # Train the model with the best hyperparameters
+    model = DecisionTreeClassifier(**search)
+    model.fit(p.get_X_train(), p.get_y_train())
+
+    return model
+
+
+m = create_model()
+
+# Save the model
+joblib.dump(m, 'dt_model.joblib')
 
 # Make predictions on the testing set
-y_pred = clf.predict(p.get_X_test())
+y_pred = m.predict(p.get_X_test())
 
 # Calculate the accuracy score, confusion matrix, and classification report
 accuracy = accuracy_score(p.get_y_test(), y_pred)
