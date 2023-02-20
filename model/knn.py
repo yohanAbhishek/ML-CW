@@ -1,3 +1,14 @@
+"""
+◉ This is a class to run KNN on the spambase dataset.
+    Preprocessing done:
+        ◦ Titles - The dataset initially has no titles, so I have added it using the "columns" method.
+        ◦ Normalize - Since the dataset values aren't normalized (Between 0 and 1), I have used a MinMaxScaler to
+         achieve normalized data. (in order to uniformly scale all the features, avoid features with higher values from
+          influencing the learning process, and improve how algorithms perceive and learn from the data)
+    Additional:
+        ◦ In terms of finding the best hyper parameters to use in this model I have implemented a grid search.
+"""
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
