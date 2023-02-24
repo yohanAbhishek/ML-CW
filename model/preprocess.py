@@ -1,3 +1,17 @@
+"""
+◉ This is a class to run preprocessing on the spambase dataset.
+steps:
+    ◦ Add column names to the dataset.
+    ◦ Shuffle the dataset.
+    ◦ There is no missing data.
+    ◦ There are no categorical features to be handled.
+    ◦ Separate the dataset into the training and testing sets.
+    ◦ Reduce the dimensionality of the dataset using PCA.
+    ◦ Handle class imbalance (Not implemented in the code).
+    ◦ Normalize feature values using MinMaxScaler.
+"""
+
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
