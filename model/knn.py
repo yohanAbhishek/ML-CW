@@ -11,6 +11,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import joblib
 
+
 def run_grid(classifier):
     print("-- Running grid search now --")
 
