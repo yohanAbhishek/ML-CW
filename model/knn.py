@@ -9,7 +9,6 @@ from sklearn.neighbors import KNeighborsClassifier
 import preprocess as p
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-import joblib
 
 
 def run_grid(classifier):
