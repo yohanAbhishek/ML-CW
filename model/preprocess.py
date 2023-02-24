@@ -1,14 +1,14 @@
 """
 ◉ This is a class to run preprocessing on the spambase dataset.
 steps:
-    ◦ Add column names to the dataset.
-    ◦ Shuffle the dataset.
-    ◦ There is no missing data.
-    ◦ There are no categorical features to be handled.
-    ◦ Separate the dataset into the training and testing sets.
-    ◦ Reduce the dimensionality of the dataset using PCA.
-    ◦ Handle class imbalance (Not implemented in the code).
-    ◦ Normalize feature values using MinMaxScaler.
+    1 Add column names to the dataset.
+    2 Shuffle the dataset.
+    3 There is no missing data.
+    4 There are no categorical features to be handled.
+    5 Separate the dataset into the training and testing sets.
+    6 Reduce the dimensionality of the dataset using PCA.
+    7 Handle class imbalance (Not implemented in the code).
+    8 Normalize feature values using MinMaxScaler.
 """
 
 
