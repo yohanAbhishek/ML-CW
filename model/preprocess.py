@@ -1,14 +1,9 @@
-"""
-Preprocessing done:
-    ◦ Titles - The dataset initially has no titles, so I have added it using the "columns" method.
-    ◦ Normalize - Since the dataset values aren't normalized (Between 0 and 1), I have used a MinMaxScaler to
-     achieve normalized data. (in order to uniformly scale all the features, avoid features with higher values from
-      influencing the learning process, and improve how algorithms perceive and learn from the data)
-"""
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Store the dataset into a variable
 data = pd.read_csv('../spambase/spambase.data', header=None)
@@ -28,40 +23,37 @@ cols = [
     'capital_run_length_longest', 'capital_run_length_total', 'spam'
 ]
 
-# Add columns to the dataset
+# Add column names to the dataset
 data.columns = cols
 
-# Shuffle the DataFrame
+# Shuffle the dataset
 data = data.sample(frac=1, random_state=1).reset_index(drop=True)
 
-# print(data.head())
-# print(data.shape)
-
-# create a dataframe with all training data except the target column
+# Separate the dataset into training and testing sets
 X = data.iloc[:, :-1]
-
-# check that the target variable has been removed
-# print(X.head())
-
-# separate target values
 y = data.iloc[:, -1]
-
-# view target values
-# print(y[0:5])
-
-# Normalize the feature values
-scaler = MinMaxScaler()
-X = scaler.fit_transform(X)
-
-# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Reduce the dimensionality of the dataset using PCA
+n_components = 44  # 90% components
+pca = PCA(n_components=n_components)
+X_pca = pca.fit_transform(X)
 
-# # check the shapes of the resulting arrays
-# print(f"X_train shape: {X_train.shape}")
-# print(f"X_test shape: {X_test.shape}")
-# print(f"y_train shape: {y_train.shape}")
-# print(f"y_test shape: {y_test.shape}")
+# Normalize feature values
+scaler = MinMaxScaler()
+X_pca = scaler.fit_transform(X_pca)
+
+# Create a scatter plot of the transformed data with color-coded labels
+sns.scatterplot(x=X_pca[:, 0], y=X_pca[:, 1], hue=y, palette='Set2')
+plt.show()
+
+# Compute correlation matrix
+corr_matrix = data.corr()
+
+# Plot heatmap
+# sns.heatmap(corr_matrix, cmap='coolwarm', annot=True, fmt='.2f')
+# plt.title('Correlation Matrix')
+# plt.show()
 
 
 def get_X_train():
