@@ -38,6 +38,9 @@ def create_model():
     # Train the model with the best hyperparameters
     model = DecisionTreeClassifier(**search)
     model.fit(p.get_X_train(), p.get_y_train())
+    # Save the model
+    joblib.dump(model, 'trained_models/dt_model.joblib')
+
 
     return model
 
@@ -45,7 +48,7 @@ def create_model():
 m = create_model()
 
 # Save the model
-joblib.dump(m, 'dt_model.joblib')
+joblib.dump(m, 'trained_models/dt_model.joblib')
 
 # Make predictions on the testing set
 y_pred = m.predict(p.get_X_test())

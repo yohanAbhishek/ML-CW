@@ -4,7 +4,7 @@ Additional:
     ◦ In terms of finding the best hyper parameters to use in this model I have implemented a grid search.
     ◦ Saved the model
 """
-
+import joblib
 from sklearn.neighbors import KNeighborsClassifier
 import preprocess as p
 from sklearn.model_selection import GridSearchCV
@@ -50,6 +50,7 @@ def create_model():
 
     # Fit the model on the training data
     model.fit(p.get_X_train(), p.get_y_train())
+    joblib.dump(model, 'knn_model.joblib')
 
     return model
 
