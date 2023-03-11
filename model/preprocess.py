@@ -11,13 +11,10 @@ steps:
     8 Normalize feature values using MinMaxScaler.
 """
 
-
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
-import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 
 # Store the dataset into a variable
 data = pd.read_csv('../spambase/spambase.data', header=None)
@@ -40,29 +37,34 @@ cols = [
 # Add column names to the dataset
 data.columns = cols
 
-# Shuffle the dataset
-data = data.sample(frac=1, random_state=1).reset_index(drop=True)
+# # Shuffle the dataset
+data = data.sample(frac=1, random_state=42).reset_index(drop=True)
 
-# Separate the dataset into training and testing sets
+# Separate the dataset into features and target
 X = data.iloc[:, :-1]
 y = data.iloc[:, -1]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# # Normalize feature values
+scaler = MinMaxScaler()
+X_scaled = scaler.fit_transform(X)
 
 # Reduce the dimensionality of the dataset using PCA
-n_components = 44  # 90% components
+n_components = 0.9  # 90% variance
 pca = PCA(n_components=n_components)
-X_pca = pca.fit_transform(X)
+X_pca = pca.fit_transform(X_scaled)
 
-# Normalize feature values
-scaler = MinMaxScaler()
-X_pca = scaler.fit_transform(X_pca)
+# Separate the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_pca, y, test_size=0.2)
+
+print("PCA and normalization completed successfully.")
 
 # Create a scatter plot of the transformed data with color-coded labels
-sns.scatterplot(x=X_pca[:, 0], y=X_pca[:, 1], hue=y, palette='Set2')
-plt.show()
+# sns.scatterplot(x=X_pca[:, 0], y=X_pca[:, 1], hue=y, palette='Set2')
+# plt.show()
 
 # Compute correlation matrix
 corr_matrix = data.corr()
+
 
 # Plot heatmap
 # sns.heatmap(corr_matrix, cmap='coolwarm', annot=True, fmt='.2f')
