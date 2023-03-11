@@ -36,11 +36,14 @@ def create_model():
     search = run_grid()
 
     # Train the model with the best hyperparameters
-    model = DecisionTreeClassifier(**search)
+    model = DecisionTreeClassifier(
+        max_depth=search['max_depth'],
+        min_samples_split=search['min_samples_split'],
+        min_samples_leaf=search['min_samples_leaf']
+    )
     model.fit(p.get_X_train(), p.get_y_train())
     # Save the model
     joblib.dump(model, 'trained_models/dt_model.joblib')
-
 
     return model
 
