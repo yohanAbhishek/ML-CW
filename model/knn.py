@@ -50,7 +50,7 @@ def create_model():
 
     # Fit the model on the training data
     model.fit(p.get_X_train(), p.get_y_train())
-    joblib.dump(model, 'knn_model.joblib')
+    joblib.dump(model, 'trained_models/knn_model.joblib')
 
     return model
 
@@ -70,3 +70,4 @@ report = classification_report(p.get_y_test(), y_pred)
 print(f"Accuracy: {accuracy}")
 print(f"Confusion Matrix:\n{matrix}")
 print(f"Classification Report:\n{report}")
+
